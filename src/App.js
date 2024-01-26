@@ -28,9 +28,14 @@ function App() {
     },
   ]);
   const addTask = () => {
+    console.log(tasks[tasks.length - 1].id);
     dispatch({
       type: 'addo',
-      task: { id: tasks[tasks.length - 1].id + 1, name: name, desc: desc },
+      task: {
+        id: tasks[tasks.length - 1] ? tasks[tasks.length - 1].id + 1 : 0,
+        name: name,
+        desc: desc,
+      },
     });
     setDesc('');
     setName('');
@@ -65,6 +70,7 @@ function App() {
         if (e) {
           return (
             <div key={i}>
+              <h2>{e.id}</h2>
               <h2>{e.category}</h2>
               <h2>{e.name}</h2>
               <h2>{e.desc}</h2>
