@@ -28,7 +28,6 @@ function App() {
     },
   ]);
   const addTask = () => {
-    console.log(tasks[tasks.length - 1].id);
     dispatch({
       type: 'addo',
       task: {
@@ -70,11 +69,10 @@ function App() {
         if (e) {
           return (
             <div key={i}>
-              <h2>{e.id}</h2>
               <h2>{e.category}</h2>
               <h2>{e.name}</h2>
               <h2>{e.desc}</h2>
-              <button onClick={() => deleteTask(e.id)}>Delete Task</button>;
+              <button onClick={() => deleteTask(e.id)}>Delete Task</button>
             </div>
           );
         } else return null;
