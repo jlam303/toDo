@@ -1,15 +1,12 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 function App() {
-  const reducer = (state, action) => {
+  const [name, setName] = useState('');
+  const [cat, setCat] = useState('');
+  const [desc, setDesc] = useState('');
+  const reducerTask = (state, action) => {
     switch (action.type) {
       case 'addo':
-        return state.map((task) => {
-          if (task.id === action.id) {
-            return { ...task, status: true };
-          } else {
-            return task;
-          }
-        });
+        return [...state, action.task];
       case 'deleto':
         return state.map((task) => {
           if (task.id === action.id) {
@@ -22,23 +19,48 @@ function App() {
         return state;
     }
   };
-  const [tasks, dispatch] = useReducer(reducer, [
+  const [tasks, dispatch] = useReducer(reducerTask, [
     {
       id: 0,
       name: 'Eat',
       desc: 'eat the food',
       category: 'food',
-      status: true,
     },
   ]);
-  const addTask = (id) => {
-    dispatch({ type: 'addo', id: id });
+  const addTask = () => {
+    dispatch({
+      type: 'addo',
+      task: { id: tasks[tasks.length - 1].id + 1, name: name, desc: desc },
+    });
+    setDesc('');
+    setName('');
   };
   const deleteTask = (id) => {
     dispatch({ type: 'deleto', id: id });
   };
   return (
     <div className='App'>
+      <form action=''>
+        <label htmlFor='name'>Name:</label>
+        <input
+          type='text'
+          name='name'
+          id='name'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <label htmlFor='desc'>Description:</label>
+        <input
+          type='text'
+          name='desc'
+          id='desc'
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+        <button type='reset' onClick={() => addTask()}>
+          Add Task
+        </button>
+      </form>
       {tasks.map((e, i) => {
         if (e) {
           return (
@@ -51,7 +73,6 @@ function App() {
           );
         } else return null;
       })}
-      <button onClick={() => addTask()}>Add Task</button>
     </div>
   );
 }
