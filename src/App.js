@@ -42,17 +42,10 @@ function App() {
       id: 0,
       name: 'Eat',
       desc: 'eat the food',
-      category: 'food',
+      category: 'Food',
     },
   ]);
-  const [categories, dispatcho] = useReducer(reducerCat, [
-    {
-      id: 0,
-      name: 'Eat',
-      desc: 'eat the food',
-      category: 'food',
-    },
-  ]);
+  const [categories, dispatcho] = useReducer(reducerCat, ['General', 'Food']);
   const addTask = () => {
     if (update) {
       setUpdate(false);
@@ -63,6 +56,7 @@ function App() {
           id: upId,
           name: name,
           desc: desc,
+          category: cat,
         },
       });
       setDesc('');
@@ -70,12 +64,14 @@ function App() {
       setCat('');
       return;
     }
+    console.log(cat);
     dispatch({
       type: 'addo',
       task: {
         id: tasks[tasks.length - 1] ? tasks[tasks.length - 1].id + 1 : 0,
         name: name,
         desc: desc,
+        category: cat,
       },
     });
     setDesc('');
@@ -111,6 +107,23 @@ function App() {
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
+        <label htmlFor='cats'>Category:</label>
+        <select
+          onChange={(e) => {
+            setCat(e.target.value);
+          }}
+          name='cats'
+          id='cats'>
+          {categories.map((e, i) => {
+            if (e) {
+              return (
+                <option key={i} value={e}>
+                  {e}
+                </option>
+              );
+            } else return null;
+          })}
+        </select>
         <button type='reset' onClick={() => addTask()}>
           {update ? 'Update' : 'Add Task'}
         </button>
