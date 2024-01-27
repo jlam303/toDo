@@ -11,7 +11,7 @@ Do this first to install dependencies and thats it.
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the todo list in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
