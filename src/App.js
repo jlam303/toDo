@@ -1,14 +1,15 @@
 import { useReducer, useState, useEffect } from 'react';
 function App() {
   const [name, setName] = useState('');
-  const [cat, setCat] = useState('General');
+  const [cat, setCat] = useState('');
   const [cato, setCato] = useState('');
+  const [sortVal, setSortVal] = useState('');
   const [desc, setDesc] = useState('');
   const [upId, setId] = useState('');
   const [upId2, setId2] = useState('');
   const [update, setUpdate] = useState(false);
   const [update2, setUpdate2] = useState(false);
-
+  const [sorted, setSorted] = useState([]);
   const reducerTask = (state, action) => {
     switch (action.type) {
       case 'set':
@@ -71,6 +72,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('cats', JSON.stringify(categories));
+    setSorted(tasks);
   }, [tasks, categories]);
   const addTask = () => {
     if (update) {
@@ -87,7 +89,7 @@ function App() {
       });
       setDesc('');
       setName('');
-      setCat('General');
+      setCat('');
       console.log(tasks);
 
       return;
@@ -106,7 +108,7 @@ function App() {
 
     setDesc('');
     setName('');
-    setCat('General');
+    setCat('');
   };
   const addCat = () => {
     if (update2) {
@@ -136,7 +138,7 @@ function App() {
     setName(e.name);
     setId(e.id);
     console.log(e.id);
-    setCat('General');
+    setCat('');
     setUpdate(true);
   };
   const deleteCat = (name) => {
@@ -146,6 +148,12 @@ function App() {
     setCato(e);
     setId2(e);
     setUpdate2(true);
+  };
+  const sort = () => {
+    setSorted(tasks.filter((x) => x.category === sortVal));
+  };
+  const unsort = () => {
+    setSorted(tasks);
   };
   return (
     <div className='App flexy'>
@@ -175,6 +183,7 @@ function App() {
             value={cat}
             name='cats'
             id='cats'>
+            <option value={''}>Select</option>
             {categories.map((e, i) => {
               if (e) {
                 return (
@@ -189,7 +198,34 @@ function App() {
             {update ? 'Update' : 'Add Task'}
           </button>
         </form>
-        {tasks.map((e, i) => {
+        <form action=''>
+          <label htmlFor='sort'>Category:</label>
+          <select
+            onChange={(e) => {
+              setSortVal(e.target.value);
+            }}
+            value={sortVal}
+            name='sort'
+            id='sort'>
+            <option value={''}>Select</option>
+            {categories.map((e, i) => {
+              if (e) {
+                return (
+                  <option key={i} value={e}>
+                    {e}
+                  </option>
+                );
+              } else return null;
+            })}
+          </select>
+          <button type='reset' onClick={() => sort()}>
+            Sort
+          </button>
+          <button type='reset' onClick={() => unsort()}>
+            Unsort
+          </button>
+        </form>
+        {sorted.map((e, i) => {
           if (e) {
             return (
               <div className='flexy3 divy' key={i}>
