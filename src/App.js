@@ -5,7 +5,7 @@ function App() {
   const [cato, setCato] = useState('');
   const [desc, setDesc] = useState('');
   const [upId, setId] = useState('');
-
+  const [upId2, setId2] = useState('');
   const [update, setUpdate] = useState(false);
   const [update2, setUpdate2] = useState(false);
 
@@ -47,7 +47,7 @@ function App() {
         });
       case 'edito':
         return state.map((task) => {
-          if (task.id === action.id) {
+          if (task === action.id) {
             return action.cat;
           } else {
             return task;
@@ -102,7 +102,7 @@ function App() {
       setUpdate2(false);
       dispatcho({
         type: 'edito',
-        id: upId,
+        id: upId2,
         cat: cato,
       });
       setCato('');
@@ -128,8 +128,9 @@ function App() {
     dispatcho({ type: 'deleto', name: name });
   };
   const editCat = (e) => {
-    setCato(e.cato);
-    setUpdate(true);
+    setCato(e);
+    setId2(e);
+    setUpdate2(true);
   };
   return (
     <div className='App'>
@@ -191,6 +192,7 @@ function App() {
           type='text'
           name='cat'
           id='cat'
+          value={cato}
           onChange={(e) => setCato(e.target.value)}
         />
         <button type='reset' onClick={() => addCat()}>
