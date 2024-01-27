@@ -72,7 +72,6 @@ function App() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('cats', JSON.stringify(categories));
   }, [tasks, categories]);
-
   const addTask = () => {
     if (update) {
       setUpdate(false);
@@ -193,7 +192,7 @@ function App() {
         {tasks.map((e, i) => {
           if (e) {
             return (
-              <div key={i}>
+              <div className='flexy3 divy' key={i}>
                 <h3>{e.category}</h3>
                 <h4>{e.name}</h4>
                 <p>{e.desc}</p>
@@ -221,7 +220,7 @@ function App() {
         {categories.map((e, i) => {
           if (e) {
             return (
-              <div className='flexy' key={i}>
+              <div className='flexy2 divy' key={i}>
                 <h3>{e}</h3>
                 <button onClick={() => deleteCat(e)}>Delete Category</button>
                 <button onClick={() => editCat(e)}>Edit Category</button>
