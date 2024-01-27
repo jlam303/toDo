@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# To Do list
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In this project you are able to add, edit, and delete tasks and categories. YOu are also able to sort by categories.
 
 ## Available Scripts
 
