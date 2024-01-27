@@ -1,11 +1,13 @@
 import { useReducer, useState } from 'react';
 function App() {
   const [name, setName] = useState('');
-  const [cat, setCat] = useState('');
+  const [cat, setCat] = useState('General');
+  const [cato, setCato] = useState('');
   const [desc, setDesc] = useState('');
   const [upId, setId] = useState('');
 
   const [update, setUpdate] = useState(false);
+  const [update2, setUpdate2] = useState(false);
 
   const reducerTask = (state, action) => {
     switch (action.type) {
@@ -33,6 +35,24 @@ function App() {
   };
   const reducerCat = (state, action) => {
     switch (action.type) {
+      case 'addo':
+        return [...state, action.cat];
+      case 'deleto':
+        return state.map((task) => {
+          if (task === action.name) {
+            return false;
+          } else {
+            return task;
+          }
+        });
+      case 'edito':
+        return state.map((task) => {
+          if (task.id === action.id) {
+            return action.cat;
+          } else {
+            return task;
+          }
+        });
       default:
         return state;
     }
@@ -61,10 +81,9 @@ function App() {
       });
       setDesc('');
       setName('');
-      setCat('');
+      setCat('General');
       return;
     }
-    console.log(cat);
     dispatch({
       type: 'addo',
       task: {
@@ -76,7 +95,24 @@ function App() {
     });
     setDesc('');
     setName('');
-    setCat('');
+    setCat('General');
+  };
+  const addCat = () => {
+    if (update2) {
+      setUpdate2(false);
+      dispatcho({
+        type: 'edito',
+        id: upId,
+        cat: cato,
+      });
+      setCato('');
+      return;
+    }
+    dispatcho({
+      type: 'addo',
+      cat: cato,
+    });
+    setCato('');
   };
   const deleteTask = (id) => {
     dispatch({ type: 'deleto', id: id });
@@ -86,6 +122,13 @@ function App() {
     setName(e.name);
     setId(e.id);
     setCat(e.cat);
+    setUpdate(true);
+  };
+  const deleteCat = (name) => {
+    dispatcho({ type: 'deleto', name: name });
+  };
+  const editCat = (e) => {
+    setCato(e.cato);
     setUpdate(true);
   };
   return (
@@ -112,6 +155,7 @@ function App() {
           onChange={(e) => {
             setCat(e.target.value);
           }}
+          value={cat}
           name='cats'
           id='cats'>
           {categories.map((e, i) => {
@@ -137,6 +181,29 @@ function App() {
               <p>{e.desc}</p>
               <button onClick={() => deleteTask(e.id)}>Delete Task</button>
               <button onClick={() => editTask({ ...e })}>Edit Task</button>
+            </div>
+          );
+        } else return null;
+      })}
+      <form action=''>
+        <label htmlFor='cat'>Category:</label>
+        <input
+          type='text'
+          name='cat'
+          id='cat'
+          onChange={(e) => setCato(e.target.value)}
+        />
+        <button type='reset' onClick={() => addCat()}>
+          {update2 ? 'Update' : 'Add Categoy'}
+        </button>
+      </form>
+      {categories.map((e, i) => {
+        if (e) {
+          return (
+            <div className='flexy' key={i}>
+              <h3>{e}</h3>
+              <button onClick={() => deleteCat(e)}>Delete Category</button>
+              <button onClick={() => editCat(e)}>Edit Category</button>
             </div>
           );
         } else return null;
