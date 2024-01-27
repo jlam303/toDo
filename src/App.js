@@ -3,6 +3,10 @@ function App() {
   const [name, setName] = useState('');
   const [cat, setCat] = useState('');
   const [desc, setDesc] = useState('');
+  const [upId, setId] = useState('');
+
+  const [update, setUpdate] = useState(false);
+
   const reducerTask = (state, action) => {
     switch (action.type) {
       case 'addo':
@@ -15,6 +19,20 @@ function App() {
             return task;
           }
         });
+      case 'edito':
+        return state.map((task) => {
+          if (task.id === action.id) {
+            return action.task;
+          } else {
+            return task;
+          }
+        });
+      default:
+        return state;
+    }
+  };
+  const reducerCat = (state, action) => {
+    switch (action.type) {
       default:
         return state;
     }
@@ -27,7 +45,31 @@ function App() {
       category: 'food',
     },
   ]);
+  const [categories, dispatcho] = useReducer(reducerCat, [
+    {
+      id: 0,
+      name: 'Eat',
+      desc: 'eat the food',
+      category: 'food',
+    },
+  ]);
   const addTask = () => {
+    if (update) {
+      setUpdate(false);
+      dispatch({
+        type: 'edito',
+        id: upId,
+        task: {
+          id: upId,
+          name: name,
+          desc: desc,
+        },
+      });
+      setDesc('');
+      setName('');
+      setCat('');
+      return;
+    }
     dispatch({
       type: 'addo',
       task: {
@@ -38,9 +80,17 @@ function App() {
     });
     setDesc('');
     setName('');
+    setCat('');
   };
   const deleteTask = (id) => {
     dispatch({ type: 'deleto', id: id });
+  };
+  const editTask = (e) => {
+    setDesc(e.desc);
+    setName(e.name);
+    setId(e.id);
+    setCat(e.cat);
+    setUpdate(true);
   };
   return (
     <div className='App'>
@@ -62,17 +112,18 @@ function App() {
           onChange={(e) => setDesc(e.target.value)}
         />
         <button type='reset' onClick={() => addTask()}>
-          Add Task
+          {update ? 'Update' : 'Add Task'}
         </button>
       </form>
       {tasks.map((e, i) => {
         if (e) {
           return (
             <div key={i}>
-              <h2>{e.category}</h2>
-              <h2>{e.name}</h2>
-              <h2>{e.desc}</h2>
+              <h3>{e.category}</h3>
+              <h4>{e.name}</h4>
+              <p>{e.desc}</p>
               <button onClick={() => deleteTask(e.id)}>Delete Task</button>
+              <button onClick={() => editTask({ ...e })}>Edit Task</button>
             </div>
           );
         } else return null;
